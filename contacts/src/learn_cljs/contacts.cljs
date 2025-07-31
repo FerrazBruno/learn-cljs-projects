@@ -253,10 +253,10 @@
   (render-app! state)
   (attach-event-handlers! state))
 
-(def initial-state
-  {:contacts contact-list
-   :selected nil
-   :editing? false})
+(defonce initial-state
+  (atom {:contacts contact-list
+         :selected nil
+         :editing? false}))
 
-(refresh! initial-state)
+(refresh! @initial-state)
 
