@@ -1,11 +1,11 @@
 (ns ^:figwheel-hooks learn-cljs.chat
   (:require
-   [api :as api]
+   [learn-cljs.api :as api]
    [goog.dom :as gdom]
-   [handlers]
+   [learn-cljs.handlers]
    [learn-cljs.components.app :refer [init-app]]
-   [message-bus :as bus]
-   [state :as state]))
+   [learn-cljs.message-bus :as bus]
+   [learn-cljs.state :as state]))
 
 (defonce initialized?
   (do

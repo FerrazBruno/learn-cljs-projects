@@ -1,6 +1,6 @@
 (ns learn-cljs.message-bus
   (:require
-    [cljs-core.async :refer [go-loop pub sub chan <! put!]]))
+    [clojure.core.async :refer [go-loop pub sub chan <! put!]]))
 
 (def msg-ch (chan 1))
 (def msg-bus (pub msg-ch ::type))

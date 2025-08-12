@@ -1,7 +1,7 @@
 (ns learn-cljs.api
   (:require
     [cljs.reader :refer [read-string]]
-    [message-bus :as bus]))
+    [learn-cljs.message-bus :as bus]))
 
 (defonce api (atom nil))
 
