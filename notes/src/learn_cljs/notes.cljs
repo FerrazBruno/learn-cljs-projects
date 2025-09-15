@@ -1,6 +1,23 @@
 (ns ^:figwheel-hooks learn-cljs.notes
   (:require
-   [goog.dom :as gdom]))
+    [learn-cljs.notes.ui.footer  :refer [footer]]
+    [learn-cljs.notes.ui.header  :refer [header]]
+    [learn-cljs.notes.ui.main    :refer [main]]
+    [learn-cljs.notes.ui.sidebar :refer [sidebar]]
+    [goog.dom :as gdom]
+    [reagent.dom :as rdom]))
+
+(defn app
+  []
+  [:div.app
+   [header]
+   [main]
+   [sidebar]
+   [footer]])
+
+(rdom/render
+  [app]
+  (dgom/getElement "app"))
 
 (defn map-values
   [f m]
@@ -23,7 +40,7 @@
          :tag-id (:id tag)}))
     notes))
 
-(defn normalize-notes 
+(defn normalize-notes
   [notes]
   (let [links (get-links notes)
         notes-without-tags (mapv #(dissoc % :tags) notes)
