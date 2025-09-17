@@ -1,11 +1,18 @@
 (ns ^:figwheel-hooks learn-cljs.notes
   (:require
+    [learn-cljs.notes.event-handlers.core]
+    [learn-cljs.notes.routes     :as    routes]
     [learn-cljs.notes.ui.footer  :refer [footer]]
     [learn-cljs.notes.ui.header  :refer [header]]
     [learn-cljs.notes.ui.main    :refer [main]]
     [learn-cljs.notes.ui.sidebar :refer [sidebar]]
-    [goog.dom :as gdom]
-    [reagent.dom :as rdom]))
+    [goog.dom                    :as    gdom]
+    [reagent.dom                 :as    rdom]))
+
+(defonce initialize?
+  (do
+    (routes/initialize)
+    true))
 
 (defn app
   []
@@ -17,7 +24,7 @@
 
 (rdom/render
   [app]
-  (dgom/getElement "app"))
+  (gdom/getElement "app"))
 
 (defn map-values
   [f m]
