@@ -17,8 +17,17 @@
   [name params query]
   (emit! :route/navigated [name params query]))
 
-(defn initialize
+(defn initialize!
   []
   (bide/start! router {:default :router/home
                        :on-navigate on-navigate}))
+
+(defn get-url
+  [route-params]
+  (str "#" (apply bide/resolve router route-params)))
+
+(defn matches?
+  [route-params current-route]
+  (= (get-url route-params)
+     (get-url current-route)))
 

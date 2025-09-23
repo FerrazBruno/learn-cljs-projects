@@ -11,7 +11,7 @@
   ([method path body cb]
    (let [serialized-body (when body
                            (->> body
-                                (cske/trandform-keys csk/->camelCaseString)
+                                (cske/transform-keys csk/->camelCaseString)
                                 (clj->js)
                                 (js/JSON.stringfy)))]
      (-> (js/fetch
@@ -47,12 +47,48 @@
          {:type :error
           :text (str "API: Error: " (ex-message err))}))
 
+(defn- with-error-handling
+  [f]
+  (fn [res]
+    (->> res
+         (err/map f)
+         (err/unwrap-or display-error))))
+
 (defn create-note!
   [note]
   (do-request! :post "/notes" note
-               (fn [res]
-                 (->> res
-                      (err/map
-                        #(emit! :note/create %))
-                      (err/unwrap-or display-error)))))
+               (with-error-handling #(emit! :note/create %))))
+
+(defn get-notes!
+  []
+  (do-request! :get "/notes"
+               (with-error-handling #(emit! :note/received %))))
+
+(defn update-note!
+  [note]
+  (do-request! :put (str "/notes/" (:id note)) note
+               (with-error-handling
+                 #(emit! :note/updated note))))
+
+(defn get-note!
+  [id]
+  (do-request! :get (str "/notes/" id)
+               (with-error-handling #(emit! :note/received %))))
+
+(defn get-tags!
+  []
+  (do-request! :get "/tags"
+               (with-error-handling #(emit! :tags/received %))))
+
+(defn create-tag!
+  [tag-name]
+  (do-request! :post "/tags" {:name tag-name}
+               (with-error-handling #(emit! :tag/created %))))
+
+(defn tag-note!
+  [note-id tag-id]
+  (do-request! :put (str "/notes/" note-id "/tags/" tag-id)
+               (with-error-handling
+                 #(emit! :note/tagged {:note-id note-id
+                                       :tag-id tag-id}))))
 

@@ -1,10 +1,13 @@
 (ns learn-cljs.notes.ui.common
   (:require
-    [learn-cljs.notes.command :refer [dispatch!]]))
+    [learn-cljs.notes.command :refer [dispatch!]]
+    [learn-cljs.notes.state :as state]
+    [learn-cljs.notes.routes :as routes]))
 
 (defn handle-navigate
   [route-params]
-  (fn [_]
+  (fn [e]
+    (.preventDefault e)
     (dispatch! :route/navigate route-params)))
 
 (defn handle-dispatch
@@ -12,6 +15,14 @@
   (fn [e]
     (.preventDefault e)
     (apply dispatch! command-data)))
+
+(defn link
+  [text route-params]
+  [:a {:href (routes/get-url route-params)
+       :on-click (handle-navigate route-params)
+       :class (if (routes/matches? route-params (:current-route @state/app))
+                "active" "")}
+   text])
 
 (defn button
   [text {:keys [class dispatch on-click route-params]

@@ -1,7 +1,8 @@
 (ns learn-cljs.notes.ui.main
   (:require
     [learn-cljs.notes.state :as state]
-    [learn-cljs.notes.ui.views.home :refer [home]]))
+    [learn-cljs.notes.ui.views.home :refer [home]]
+    [learn-cljs.notes.ui.views.note-form :refer [note-form]]))
 
 (defn not-found
   []
@@ -13,6 +14,8 @@
   (let [[route params query] (:current-route @state/app)]
     [:div.main
      (case route
+       :create-note [note-form]
+       :edit-note [note-form]
        :home [home]
        [not-found])]))
 
